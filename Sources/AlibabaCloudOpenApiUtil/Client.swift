@@ -348,25 +348,24 @@ open class Client {
     }
 
     private static func buildCanonicalizedResource(query: [String: Any]) -> String {
-        var keys: [String] = []
-        for (key, _) in query {
-            keys.append(key)
-        }
-        keys.sort()
-        var result: String = ""
-        var sep : String = ""
-        for key in keys {
-            result.append(sep)
-            result.append(key.urlEncode())
-            result.append("=")
-            if query[key] is String && !(query[key] as! String).isEmpty
-                || (!(query[key] is String) && query[key] != nil) {
-                result.append("\(query[key] ?? "")")
-            }
-            sep = SEPARATOR
-        }
-        return result
-    }
+         var keys: [String] = []
+         for (key, _) in query {
+             keys.append(key)
+         }
+         keys.sort()
+         var result: String = ""
+         var sep : String = ""
+         for key in keys {
+             result.append(sep)
+             result.append(key.urlEncode())
+             result.append("=")
+             if let value = query[key] as? String, !value.isEmpty {
+                 result.append(value.urlEncode())
+             }
+             sep = SEPARATOR
+         }
+         return result
+     }
 
     public static func getEncodePath(_ path: String?) -> String {
         if path == nil || path!.isEmpty {
